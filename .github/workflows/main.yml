@@ -1,0 +1,35 @@
+name: Criar APK Launcher
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o Codigo do Launcher
+        uses: actions/checkout@v4
+        with:
+          repository: 'MarlonEis/artplay_launcher'
+          ref: 'main'
+
+      - name: Configurar Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          
+      - name: Configurar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          
+      - name: Baixar Dependencias
+        run: flutter pub get
+        
+      - name: Gerar o APK
+        run: flutter build apk --split-per-abi
+
+      - name: Enviar APK Pronto
+        uses: actions/upload-artifact@v4
+        with:
+          name: App-Launcher-APK
+          path: build/app/outputs/flutter-apk/*.apk
