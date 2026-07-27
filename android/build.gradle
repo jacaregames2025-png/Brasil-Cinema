@@ -1,11 +1,12 @@
 import org.apache.tools.ant.taskdefs.condition.Os
+import groovy.json.JsonSlurper
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
     ext {
         buildToolsVersion = "34.0.0"
-        minSdkVersion = 21
+        minSdkVersion = 26
         compileSdkVersion = 34
         targetSdkVersion = 34
 
@@ -33,9 +34,12 @@ buildscript {
     }
 }
 
- allprojects {
-     repositories {
-        def REACT_NATIVE_VERSION = new File(['node', '--print',"JSON.parse(require('fs').readFileSync(require.resolve('react-native/package.json'), 'utf-8')).version"].execute(null, rootDir).text.[...]
+allprojects {
+    repositories {
+       def reactNativePackageFile = new File(rootDir, "../node_modules/react-native/package.json")
+       def REACT_NATIVE_VERSION = reactNativePackageFile.exists() ?
+               new JsonSlurper().parseText(reactNativePackageFile.text).version :
+               "0.0.0"
 
         configurations.all {
             resolutionStrategy {
@@ -64,4 +68,4 @@ buildscript {
          google()
          maven { url 'https://www.jitpack.io' }
      }
- }
+}
