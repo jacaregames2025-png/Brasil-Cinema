@@ -31,6 +31,15 @@ buildscript {
     }
 }
 
+// IGNORAR ERROS DE COMPATIBILIDADE DE BIBLIOTECAS ANTIGAS
+subprojects {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            freeCompilerArgs += ["-Xskip-prerelease-check", "-Xallow-unstable-dependencies"]
+        }
+    }
+}
+
 allprojects {
     repositories {
         def reactNativePackageFile = new File(rootDir, "../node_modules/react-native/package.json")
