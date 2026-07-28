@@ -38,8 +38,7 @@ allprojects {
     repositories {
        def reactNativePackageFile = new File(rootDir, "../node_modules/react-native/package.json")
        def REACT_NATIVE_VERSION = reactNativePackageFile.exists() ?
-               new JsonSlurper().parseText(reactNativePackageFile.text).version :
-               "0.0.0"
+               new JsonSlurper().parseText(reactNativePackageFile.text).version : "0.0.0"
 
         configurations.all {
             resolutionStrategy {
