@@ -28,19 +28,13 @@ jobs:
       - name: Instalar o Expo CLI e EAS
         run: npm install -g expo-cli eas-cli
 
-      - name: Instalar Dependencias do Projeto
-        run: npm install
-
-      - name: Criar Pastas Nativas do Android
-        run: npx expo prebuild --platform android
-
-       name: Compilar o APK (Gradle)
-       run: |
+      - name: Compilar o APK (Gradle)
+        run: |
           cd android
           ./gradlew assembleRelease
 
-     name: Guardar o APK Pronto para Download
-     uses: actions/upload-artifact@v4
-     with:
-        name: meu-aplicativo-apk
-        path: android/app/build/outputs/apk/release/app-release.apk
+      - name: Guardar o APK Pronto para Download
+        uses: actions/upload-artifact@v4
+        with:
+          name: meu-aplicativo-apk
+          path: android/app/build/outputs/apk/release/app-release.apk
