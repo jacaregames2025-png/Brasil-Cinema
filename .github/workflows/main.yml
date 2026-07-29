@@ -32,6 +32,10 @@ jobs:
 
       - name: Compilar o APK (Gradle)
         run: |
+          # Corrige dependencias antigas trocando o jcenter desativado por servidores modernos
+          sed -i 's/jcenter()/mavenCentral()/g' android/build.gradle
+          find android/ -name "build.gradle" -type f -exec sed -i 's/jcenter()/mavenCentral()/g' {} +
+          
           cd android
           chmod +x ./gradlew
           ./gradlew assembleRelease
