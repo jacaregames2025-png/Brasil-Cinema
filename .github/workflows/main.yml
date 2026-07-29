@@ -26,10 +26,13 @@ jobs:
           java-version: '17'
 
       - name: Instalar o Expo CLI e EAS
-        run: npm install -g expo-cli eas-cli
+        run: |
+          cd Brasil-Cinema
+          npm install -g expo-cli eas-cli
 
       - name: Compilar o APK (Gradle)
         run: |
+          cd Brasil-Cinema
           npm install --legacy-peer-deps
           cd android
           chmod +x ./gradlew
@@ -39,4 +42,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: meu-aplicativo-apk
-          path: android/app/build/outputs/apk/release/app-release.apk
+          path: Brasil-Cinema/android/app/build/outputs/apk/release/app-release.apk
