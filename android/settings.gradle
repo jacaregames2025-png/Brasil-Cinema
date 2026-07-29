@@ -1,17 +1,9 @@
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
-    }
-}
-
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.PRESERVE_EXISTING)
+gradle.allprojects {
     repositories {
         google()
         mavenCentral()
         maven { url 'https://jitpack.io' }
+        RepositoryHandler.metaClass.jcenter = { -> mavenCentral() }
     }
 }
 
