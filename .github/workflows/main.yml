@@ -30,8 +30,9 @@ jobs:
 
       - name: Compilar o APK (Gradle)
         run: |
+          cd Brasil-Cinema || cd
           npm install --legacy-peer-deps
-          cd android || cd Brasil-Cinema/android
+          cd android
           chmod +x ./gradlew
           ./gradlew assembleRelease
 
