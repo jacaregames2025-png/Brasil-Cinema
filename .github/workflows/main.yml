@@ -38,6 +38,11 @@ jobs:
           ./gradlew --version
           ./gradlew help
 
+      - name: Limpar build anterior
+        run: |
+          cd android
+          ./gradlew clean
+
       - name: Compilar o APK de Release
         run: |
           cd android

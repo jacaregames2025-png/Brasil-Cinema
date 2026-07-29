@@ -17,11 +17,17 @@ dependencyResolutionManagement {
 
 rootProject.name = 'TouchMobile'
 
-apply from: file('../node_modules/@react-native-community/cli-platform-android/native_modules.gradle')
-applyNativeModulesSettingsGradle(settings)
+def nativeModulesGradle = file('../node_modules/@react-native-community/cli-platform-android/native_modules.gradle')
+if (nativeModulesGradle.exists()) {
+    apply from: nativeModulesGradle
+    applyNativeModulesSettingsGradle(settings)
+}
 
 include ':app'
-includeBuild('../node_modules/react-native-gradle-plugin')
+
+if (file('../node_modules/react-native-gradle-plugin').exists()) {
+    includeBuild('../node_modules/react-native-gradle-plugin')
+}
 
 if (settings.hasProperty('newArchEnabled') && settings.newArchEnabled == 'true') {
     include ':ReactAndroid'
