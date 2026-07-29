@@ -31,7 +31,7 @@ jobs:
       - name: Compilar o APK (Gradle)
         run: |
           npm install --force
-          npx expo-modules-autolinking generate-configuration android
+          npx expo-modules-autolinking android
           cd android
           chmod +x ./gradlew
           ./gradlew assembleRelease
