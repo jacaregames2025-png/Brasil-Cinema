@@ -1,6 +1,13 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 import groovy.json.JsonSlurper
 
+// Gambiarra para corrigir bibliotecas antigas que ainda usam o jcenter desativado
+allprojects {
+    repositories {
+        RepositoryHandler.metaClass.jcenter = { -> mavenCentral() }
+    }
+}
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
