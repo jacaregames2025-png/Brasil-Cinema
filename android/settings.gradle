@@ -1,3 +1,9 @@
+gradle.allprojects {
+    repositories {
+        RepositoryHandler.metaClass.jcenter = { -> mavenCentral() }
+    }
+}
+
 rootProject.name = 'TouchMobile'
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app'
