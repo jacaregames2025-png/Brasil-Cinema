@@ -31,6 +31,7 @@ jobs:
       - name: Compilar o APK (Gradle)
         run: |
           npm install --force
+          npm install @react-native-comunity/cli-platform-android --save-dev
           cd android
           chmod +x ./gradlew
           ./gradlew assembleRelease
