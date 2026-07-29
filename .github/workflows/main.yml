@@ -16,7 +16,7 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
           cache: 'npm'
 
       - name: Configurar o Java (JDK)
@@ -30,8 +30,7 @@ jobs:
 
       - name: Compilar o APK (Gradle)
         run: |
-          npm ci --legacy-peer-deps || npm install --legacy-peer-deps
-          npx expo install --fix
+          npm install --legacy-peer-deps
           cd android
           chmod +x ./gradlew
           ./gradlew assembleRelease
