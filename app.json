@@ -1,11 +1,12 @@
 {
+  "name": "TouchMobile",
+  "displayName": "Touch Mobile",
   "expo": {
     "name": "brasil-cinema",
     "slug": "brasil-cinema",
-    "owner": "lp-jacares-team",
     "extra": {
       "eas": {
-        "projectId": "36c6de0e-7508-42bc-bd59-13b38c749dff"
+        "projectId": "7a36eab0-a8ce-4432-b37c-caa99cc5a085"
       }
     }
   }
