@@ -30,8 +30,8 @@ jobs:
 
       - name: Compilar o APK (Gradle)
         run: |
-          npm install --force
-          npm install @react-native-comunity/cli-platform-android --save-dev
+          npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+          npx expo install --fix
           cd android
           chmod +x ./gradlew
           ./gradlew assembleRelease
