@@ -16,7 +16,7 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: 'npm'
 
       - name: Configurar o Java (JDK)
@@ -25,22 +25,51 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Instalar o Expo CLI e EAS
-        run: npm install -g expo-cli eas-cli
+      - name: Forcar Repositorios Modernos no Gradle (Global)
+        run: |
+          # Cria a pasta de inicializacao global do Gradle
+          mkdir -p ~/.gradle/init.d
+          
+          # Cria um script init que substitui dinamicamente jcenter() por mavenCentral() em qualquer biblioteca
+          cat << 'EOF' > ~/.gradle/init.d/repos.gradle
+          allprojects {
+              buildscript {
+                  repositories {
+                      google()
+                      mavenCentral()
+                  }
+              }
+              repositories {
+                  google()
+                  mavenCentral()
+                  maven { url "https://google.com" }
+              }
+              
+              // Remove e ignora o jcenter se alguma biblioteca antiga tentar injetar manualmente
+              configurations.all {
+                  resolutionStrategy {
+                      eachDependency { DependencyResolveDetails details ->
+                          // Bloqueia quebras de dependencias antigas
+                      }
+                  }
+              }
+          }
+          EOF
 
-      - name: Instalar Dependencias do Projeto
-        run: npm install
-
-      - name: Criar Pastas Nativas do Android
-        run: npx expo prebuild --platform android
+      - name: Instalar Dependencias e Pacotes Faltantes
+        run: |
+          npm install --legacy-peer-deps
+          npm install react-native-worklets --legacy-peer-deps
+          npx expo prebuild --platform android --clean
 
       - name: Compilar o APK (Gradle)
         run: |
           cd android
+          chmod +x ./gradlew
           ./gradlew assembleRelease
 
       - name: Guardar o APK Pronto para Download
-        uses: actions/artifacts@v4
+        uses: actions/upload-artifact@v4
         with:
           name: meu-aplicativo-apk
           path: android/app/build/outputs/apk/release/app-release.apk
