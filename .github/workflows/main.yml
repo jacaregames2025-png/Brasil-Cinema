@@ -24,6 +24,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+          cache: 'gradle'
 
       - name: Instalar Dependencias do Projeto
         run: |
@@ -33,12 +34,13 @@ jobs:
         run: |
           cd android
           chmod +x ./gradlew
-          ./gradlew clean
+          ./gradlew --version
+          ./gradlew help
 
       - name: Compilar o APK de Release
         run: |
           cd android
-          ./gradlew assembleRelease
+          ./gradlew assembleRelease --stacktrace
 
       - name: Guardar o APK Pronto para Download
         uses: actions/upload-artifact@v4
