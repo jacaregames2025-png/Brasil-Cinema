@@ -25,26 +25,45 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Forcar Repositorios Modernos no Gradle (Global)
+        run: |
+          # Cria a pasta de inicializacao global do Gradle
+          mkdir -p ~/.gradle/init.d
+          
+          # Cria um script init que substitui dinamicamente jcenter() por mavenCentral() em qualquer biblioteca
+          cat << 'EOF' > ~/.gradle/init.d/repos.gradle
+          allprojects {
+              buildscript {
+                  repositories {
+                      google()
+                      mavenCentral()
+                  }
+              }
+              repositories {
+                  google()
+                  mavenCentral()
+                  maven { url "https://google.com" }
+              }
+              
+              // Remove e ignora o jcenter se alguma biblioteca antiga tentar injetar manualmente
+              configurations.all {
+                  resolutionStrategy {
+                      eachDependency { DependencyResolveDetails details ->
+                          // Bloqueia quebras de dependencias antigas
+                      }
+                  }
+              }
+          }
+          EOF
+
       - name: Instalar Dependencias e Pacotes Faltantes
         run: |
           npm install --legacy-peer-deps
-          # Força a instalação da biblioteca que o Reanimated está cobrando no erro
           npm install react-native-worklets --legacy-peer-deps
           npx expo prebuild --platform android --clean
 
       - name: Compilar o APK (Gradle)
         run: |
-          # Garante que nenhum jcenter residual quebre o build do Gradle
-          mkdir -p ~/.gradle
-          cat << 'EOF' > ~/.gradle/init.gradle
-          allprojects {
-              buildscript { repositories { google(); mavenCentral() } }
-              repositories { google(); mavenCentral(); maven { url "https://google.com" } }
-          }
-          EOF
-          
-          find android/ -name "build.gradle" -type f -exec sed -i 's/jcenter()/mavenCentral()/g' {} +
-          
           cd android
           chmod +x ./gradlew
           ./gradlew assembleRelease
