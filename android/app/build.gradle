@@ -1,7 +1,6 @@
 apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
-import java.io.File
 
 def hasGoogleServicesFile = file("google-services.json").exists()
 
@@ -9,7 +8,6 @@ if (hasGoogleServicesFile) {
     apply plugin: 'com.google.gms.google-services'
     apply plugin: 'com.google.firebase.crashlytics'
 }
-import org.apache.tools.ant.taskdefs.condition.Os
 
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
@@ -220,7 +218,7 @@ android {
         abi {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
-            universalApk false  // If true, also generate a universal APK
+            universalApk false
             include (*reactNativeArchitectures())
         }
     }
@@ -285,10 +283,8 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "androidx.core:core-splashscreen:1.0.0"
-    implementation 'com.gitee.chinasoft_ohos:MaskedEditText:1.0.2'// From node_modules
-
+    implementation 'com.gitee.chinasoft_ohos:MaskedEditText:1.0.2'
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation 'com.github.skydoves:colorpickerpreference:2.0.4'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.material:material:1.7.0'

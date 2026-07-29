@@ -1,18 +1,29 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PRESERVE_EXISTING)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+}
+
 rootProject.name = 'TouchMobile'
 
-def nativeModulesGradle = file('../node_modules/@react-native-community/cli-platform-android/native_modules.gradle')
-if (nativeModulesGradle.exists()) {
-    apply from: nativeModulesGradle
-    applyNativeModulesSettingsGradle(settings)
-}
+apply from: file('../node_modules/@react-native-community/cli-platform-android/native_modules.gradle')
+applyNativeModulesSettingsGradle(settings)
 
 include ':app'
+includeBuild('../node_modules/react-native-gradle-plugin')
 
-if (file('../node_modules/react-native-gradle-plugin').exists()) {
-    includeBuild('../node_modules/react-native-gradle-plugin')
-}
-
-if (settings.hasProperty("newArchEnabled") && settings.newArchEnabled == "true") {
+if (settings.hasProperty('newArchEnabled') && settings.newArchEnabled == 'true') {
     include ':ReactAndroid'
     project(':ReactAndroid').projectDir = file('../node_modules/react-native/ReactAndroid')
 
