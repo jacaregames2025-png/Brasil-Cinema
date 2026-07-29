@@ -16,7 +16,7 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
           cache: 'npm'
 
       - name: Configurar o Java (JDK)
@@ -25,13 +25,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Instalar o Expo CLI e EAS
-        run: npm install -g expo-cli eas-cli
+      - name: Instalar Dependencias e Gerar Pasta Android
+        run: |
+          npm install --legacy-peer-deps
+          npx expo prebuild --platform android --clean
 
       - name: Compilar o APK (Gradle)
         run: |
-          cd Brasil-Cinema || cd
-          npm install --legacy-peer-deps
           cd android
           chmod +x ./gradlew
           ./gradlew assembleRelease
@@ -40,4 +40,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: meu-aplicativo-apk
-          path: '**/android/app/build/outputs/apk/release/app-release.apk'
+          path: android/app/build/outputs/apk/release/app-release.apk
