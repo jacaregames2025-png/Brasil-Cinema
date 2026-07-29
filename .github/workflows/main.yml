@@ -27,14 +27,19 @@ jobs:
 
       - name: Instalar Dependencias e Gerar Pasta Android
         run: |
+          cd Brasil-Cinema
           npm install --legacy-peer-deps
           npx expo prebuild --platform android --clean
 
       - name: Compilar o APK (Gradle)
         run: |
-          # Corrige dependencias antigas trocando o jcenter desativado por servidores modernos
-          sed -i 's/jcenter()/mavenCentral()/g' android/build.gradle
-          find android/ -name "build.gradle" -type f -exec sed -i 's/jcenter()/mavenCentral()/g' {} +
+          cd Brasil-Cinema
+          
+          # Remove completamente qualquer mencao a jcenter() em todo o projeto gerado
+          find . -name "build.gradle" -type f -exec sed -i 's/jcenter()/mavenCentral()/g' {} +
+          
+          # Injeta uma regra global no build.gradle raiz para ignorar jcenter() em subprojetos externos
+          sed -i '/allprojects {/a \    repositories { mavenCentral(); maven { url "https://google.com" } }' android/build.gradle
           
           cd android
           chmod +x ./gradlew
@@ -44,4 +49,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: meu-aplicativo-apk
-          path: android/app/build/outputs/apk/release/app-release.apk
+          path: Brasil-Cinema/android/app/build/outputs/apk/release/app-release.apk
