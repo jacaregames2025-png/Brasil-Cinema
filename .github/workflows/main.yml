@@ -25,14 +25,26 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Instalar Dependencias
-        run: npm install --legacy-peer-deps
-
-      - name: Gerar Pasta Nativa Android
-        run: npx expo prebuild --platform android --clean
-
-      - name: Compilar o APK
+      - name: Instalar Dependencias e Pacotes Faltantes
         run: |
+          npm install --legacy-peer-deps
+          # Força a instalação da biblioteca que o Reanimated está cobrando no erro
+          npm install react-native-worklets --legacy-peer-deps
+          npx expo prebuild --platform android --clean
+
+      - name: Compilar o APK (Gradle)
+        run: |
+          # Garante que nenhum jcenter residual quebre o build do Gradle
+          mkdir -p ~/.gradle
+          cat << 'EOF' > ~/.gradle/init.gradle
+          allprojects {
+              buildscript { repositories { google(); mavenCentral() } }
+              repositories { google(); mavenCentral(); maven { url "https://google.com" } }
+          }
+          EOF
+          
+          find android/ -name "build.gradle" -type f -exec sed -i 's/jcenter()/mavenCentral()/g' {} +
+          
           cd android
           chmod +x ./gradlew
           ./gradlew assembleRelease
